@@ -32,7 +32,9 @@ var schema = new GraphQLSchema({
               return result.data.message.map(
                 name => {
                   return {
-                    name: name
+                    name: name,
+                    location: "Paris",
+                    age: 6
                   }
                 }
               )

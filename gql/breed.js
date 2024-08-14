@@ -5,12 +5,19 @@ const GraphQLObjectType = gql.GraphQLObjectType;
 const GraphQLString = gql.GraphQLString;
 const GraphQLList = gql.GraphQLList;
 const SubBreed = require('./subBreed');
+const { GraphQLInt } = require('graphql/type');
 
 const Breed = new GraphQLObjectType({
   name: 'Breed',
   fields: {
     name: {
       type: GraphQLString
+    },
+    location: {
+      type: GraphQLString
+    },
+    age: {
+      type: GraphQLInt
     },
     subBreed: {
       type: SubBreed,
@@ -44,10 +51,15 @@ const Breed = new GraphQLObjectType({
     },
     allImages: {
       type: new GraphQLList(GraphQLString),
-      resolve (breed) {
+      args: {
+        limit: {
+          type: GraphQLInt
+        }
+      },
+      resolve (breed, args) {
         return axios.get(`http://dog.ceo/api/breed/${breed.name}/images`)
           .then(result => {
-            return result.data.message;
+            return result.data.message.slice(0, args.limit);
           })
       }
     },
